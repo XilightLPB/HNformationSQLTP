@@ -1,0 +1,80 @@
+-- Total number of tests
+SELECT COUNT(numtest) AS 'Number of tests'
+FROM Test;
+
+-- List of score, specifying for each the name  and first name of student 
+SELECT Notations.score,
+    Student.student_name,
+    Student.student_firstname
+FROM Notations
+    JOIN Student ON Notations.numstud = Student.numstud;
+    
+-- List of score, specifying for each name and first name of student + wording 
+SELECT Notations.score,
+    Student.student_name,
+    Student.student_firstname,
+    Matter.wording
+FROM Notations
+    JOIN Student ON Notations.numstud = Student.numstud
+    JOIN Test ON Notations.numtest = Test.numtest
+    JOIN Matter ON Test.mattID = Matter.codemat;
+
+-- List of score >= 10 
+SELECT score
+FROM Notations
+WHERE score >= 10;
+
+-- Last and first name of the students  who obtained at least a score equal to 20
+SELECT Student.student_name,
+    Student.student_firstname
+FROM Notations
+    JOIN Student ON Notations.numstud = Student.numstud
+WHERE Notations.score = 20;
+
+-- Average scores for each student with first and last name
+SELECT AVG(Notations.score) as AverageScore,
+    Student.student_name,
+    Student.student_firstname
+FROM Notations
+    JOIN Student ON Notations.numstud = Student.numstud
+GROUP BY Notations.numstud;
+
+-- List of tests between the January 1 and June 30, 2014
+SELECT *
+FROM Test
+WHERE testdate > '2014-01-01'
+    AND testdate < '2014-06-30';
+
+-- List of tests (number, date and place) 
+SELECT Test.numtest,
+    Test.testdate,
+    Test.place,
+    Matter.wording
+FROM Test
+    JOIN Matter ON Test.mattID = Matter.codemat;
+
+-- Average of scores for each student, ranked from the first student, to the last one
+SELECT AVG(Notations.score) AS AverageScore,
+    Student.student_name,
+    Student.student_firstname
+FROM Notations
+    JOIN Student ON Notations.numstud = Student.numstud
+GROUP BY Notations.numstud
+ORDER BY AverageScore DESC;
+
+-- Average scores for matter 
+SELECT AVG(Notations.score) AS AverageScore,
+    Matter.wording
+FROM Notations
+    JOIN Test ON Notations.numtest = Test.numtest
+    JOIN Matter ON Test.mattID = Matter.codemat
+GROUP BY Test.mattID
+HAVING COUNT(DISTINCT Test.numtest) > 1;
+
+-- Average of scores obtained in the tests 
+SELECT AVG(Notations.score) AS AverageScore,
+    Test.numtest
+FROM Notations
+    JOIN Test ON Notations.numtest = Test.numtest
+GROUP BY Notations.numtest
+HAVING COUNT(Notations.numstud) < 6;

@@ -1,0 +1,43 @@
+DROP DATABASE IF EXISTS newDB;
+CREATE DATABASE newDB;
+USE newDB;
+
+DROP TABLE IF EXISTS Notations;
+DROP TABLE IF EXISTS Matter;
+DROP TABLE IF EXISTS Student;
+DROP TABLE IF EXISTS Test;
+
+CREATE TABLE Matter (
+    codemat VARCHAR(255) NOT NULL,
+    wording VARCHAR(255) NOT NULL,
+    coef FLOAT,
+    PRIMARY KEY(codemat)
+);
+
+CREATE TABLE Student (
+    numstud INT NOT NULL,
+    student_name VARCHAR(255),
+    student_firstname VARCHAR(255),
+    birthday DATE,
+    street VARCHAR(255),
+    postalcode VARCHAR(255),
+    city VARCHAR(255),
+    PRIMARY KEY (numstud)
+);
+
+CREATE TABLE Test(
+    numtest INT NOT NULL,
+    testdate DATE,
+    place VARCHAR(255),
+    mattID VARCHAR(255),
+    PRIMARY KEY(numtest),
+    FOREIGN KEY (mattID) REFERENCES Matter(codemat)
+);
+
+CREATE TABLE Notations (
+    score FLOAT,
+    numstud INT,
+    numtest INT,
+    FOREIGN KEY (numstud) REFERENCES Student(numstud),
+    FOREIGN KEY (numtest) REFERENCES Test(numtest)
+);

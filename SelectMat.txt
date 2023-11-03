@@ -1,0 +1,5 @@
+SELECT wording,
+    ROUND( coef / (SELECT SUM(coef) FROM Matter) * 100 ) as '%'
+FROM Matter;
+SELECT SUM(coef) as 'Total coef'
+FROM Matter
